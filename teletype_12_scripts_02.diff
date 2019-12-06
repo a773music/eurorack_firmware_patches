@@ -1,0 +1,160 @@
+diff -Naur ../clean/teletype/module/edit_mode.c ./teletype/module/edit_mode.c
+--- ../clean/teletype/module/edit_mode.c	2019-12-03 08:46:09.000000000 +0100
++++ ./teletype/module/edit_mode.c	2019-12-04 11:07:02.815603671 +0100
+@@ -406,7 +406,15 @@
+             prefix = 'M';
+         else if (script == INIT_SCRIPT)
+             prefix = 'I';
+-
++        else if (script == TT_SCRIPT_A)
++            prefix = 'A';
++        else if (script == TT_SCRIPT_B)
++            prefix = 'B';
++        else if (script == TT_SCRIPT_C)
++            prefix = 'C';
++        else if (script == TT_SCRIPT_D)
++            prefix = 'D';
++	
+         if (sel1 == sel2)
+             line_editor_draw(&le, prefix, &line[7]);
+         else
+diff -Naur ../clean/teletype/module/usb_disk_mode.c ./teletype/module/usb_disk_mode.c
+--- ../clean/teletype/module/usb_disk_mode.c	2019-12-03 08:46:09.000000000 +0100
++++ ./teletype/module/usb_disk_mode.c	2019-12-04 11:07:12.099696350 +0100
+@@ -121,7 +121,7 @@
+             }
+ 
+             char input[36];
+-            for (int s = 0; s < 10; s++) {
++            for (int s = 0; s < 14; s++) {
+                 file_putc('\n');
+                 file_putc('\n');
+                 file_putc('#');
+@@ -129,6 +129,14 @@
+                     file_putc('M');
+                 else if (s == 9)
+                     file_putc('I');
++                else if (s == 10)
++                    file_putc('A');
++                else if (s == 11)
++                    file_putc('B');
++                else if (s == 12)
++                    file_putc('C');
++                else if (s == 13)
++                    file_putc('D');
+                 else
+                     file_putc(s + 49);
+ 
+@@ -261,11 +269,19 @@
+                                     s = 8;
+                                 else if (c == 'I')
+                                     s = 9;
+-                                else if (c == 'P')
++                                else if (c == 'A')
+                                     s = 10;
++                                else if (c == 'B')
++                                    s = 11;
++                                else if (c == 'C')
++                                    s = 12;
++                                else if (c == 'D')
++                                    s = 13;
++				else if (c == 'P')
++                                    s = 14;
+                                 else if (c == 'G') {
+                                     grid_state = grid_num = grid_count = 0;
+-                                    s = 11;
++                                    s = 15;
+                                 }
+                                 else {
+                                     s = c - 49;
+@@ -298,7 +314,7 @@
+                             }
+                         }
+                         // SCRIPTS
+-                        else if (s >= 0 && s <= 9) {
++                        else if (s >= 0 && s <= 13) {
+                             if (c == '\n') {
+                                 if (p && l < SCRIPT_MAX_COMMANDS) {
+                                     tele_command_t temp;
+@@ -342,7 +358,7 @@
+                         }
+                         // PATTERNS
+                         // tele_patterns[]. l wrap start end v[64]
+-                        else if (s == 10) {
++                        else if (s == 14) {
+                             if (c == '\n' || c == '\t') {
+                                 if (b < 4) {
+                                     if (l > 3) {
+@@ -375,7 +391,8 @@
+ 
+                                 if (c == '\n') {
+                                     if (p) l++;
+-                                    if (l > 68) s = -1;
++				    // ATTE: 64 + 4?????
++                                    if (l > PATTERN_LENGTH) s = -1;
+                                     b = 0;
+                                     p = 0;
+                                 }
+@@ -392,7 +409,7 @@
+                             }
+                         }
+                         // GRID
+-                        else if (s == 11) {
++                        else if (s == 15) {
+                             grid_usb_read(&scene, c);
+                         }
+                     }
+@@ -458,4 +475,4 @@
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff -Naur ../clean/teletype/src/ops/controlflow.c ./teletype/src/ops/controlflow.c
+--- ../clean/teletype/src/ops/controlflow.c	2019-12-03 08:46:09.000000000 +0100
++++ ./teletype/src/ops/controlflow.c	2019-12-04 11:06:20.899185342 +0100
+@@ -242,7 +242,7 @@
+ static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
+                           exec_state_t *es, command_state_t *cs) {
+     uint16_t a = cs_pop(cs) - 1;
+-    if (a > INIT_SCRIPT || a < TT_SCRIPT_1) return;
++    if (a > TT_SCRIPT_D || a < TT_SCRIPT_1) return;
+ 
+     es_push(es);
+     // an overflow causes all future SCRIPT calls to fail
+@@ -271,7 +271,7 @@
+     }
+     else {
+         uint8_t s = a - 1;
+-        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_8) {
++        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_D) {
+             ss_set_script_pol(ss, s, pol);
+         }
+     }
+diff -Naur ../clean/teletype/src/state.h ./teletype/src/state.h
+--- ../clean/teletype/src/state.h	2019-12-03 08:46:09.000000000 +0100
++++ ./teletype/src/state.h	2019-12-04 11:05:43.310810352 +0100
+@@ -22,7 +22,7 @@
+ #define PATTERN_COUNT 4
+ #define PATTERN_LENGTH 64
+ #define SCRIPT_MAX_COMMANDS 6
+-#define SCRIPT_COUNT 11
++#define SCRIPT_COUNT 15
+ #define EXEC_DEPTH 8
+ #define WHILE_DEPTH 10000
+ #define RAND_STATES_COUNT 5
+diff -Naur ../clean/teletype/src/turtle.h ./teletype/src/turtle.h
+--- ../clean/teletype/src/turtle.h	2019-12-03 08:46:09.000000000 +0100
++++ ./teletype/src/turtle.h	2019-12-04 11:05:53.742914412 +0100
+@@ -41,6 +41,10 @@
+     TT_SCRIPT_8,
+     METRO_SCRIPT,
+     INIT_SCRIPT,
++    TT_SCRIPT_A,
++    TT_SCRIPT_B,
++    TT_SCRIPT_C,
++    TT_SCRIPT_D,
+     TEMP_SCRIPT
+ } script_number_t;
+ 
