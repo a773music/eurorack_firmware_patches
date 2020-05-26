@@ -120,7 +120,7 @@ diff -Naur -x .git ../2019_12_22/module/usb_disk_mode.c ./module/usb_disk_mode.c
                                      if (p) l++;
 -                                    if (l > 68) s = -1;
 +				    // ATTE: 64 + 4?????
-+                                    if (l > PATTERN_LENGTH) s = -1;
++                                    if (l > PATTERN_LENGTH + 4) s = -1;
                                      b = 0;
                                      p = 0;
                                  }
