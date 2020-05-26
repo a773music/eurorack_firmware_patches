@@ -1,6 +1,6 @@
-diff -Naur -x .git ../2019_12_22/module/edit_mode.c ./module/edit_mode.c
---- ../2019_12_22/module/edit_mode.c	2019-12-22 14:06:16.000000000 +0100
-+++ ./module/edit_mode.c	2019-12-22 14:07:39.982649728 +0100
+diff -Naur ./module/edit_mode.c ../2020_05_26_12_scripts/module/edit_mode.c
+--- ./module/edit_mode.c	2020-05-26 16:12:19.373454306 +0200
++++ ../2020_05_26_12_scripts/module/edit_mode.c	2020-05-26 16:12:55.438040119 +0200
 @@ -409,6 +409,22 @@
          }
          else if (script == INIT_SCRIPT)
@@ -24,32 +24,9 @@ diff -Naur -x .git ../2019_12_22/module/edit_mode.c ./module/edit_mode.c
          else if (script <= TT_SCRIPT_8)
              muted = ss_get_mute(&scene_state, script);
  
-diff -Naur -x .git ../2019_12_22/module/edit_mode.c.rej ./module/edit_mode.c.rej
---- ../2019_12_22/module/edit_mode.c.rej	1970-01-01 01:00:00.000000000 +0100
-+++ ./module/edit_mode.c.rej	2019-12-22 14:07:39.982649728 +0100
-@@ -0,0 +1,19 @@
-+--- ../clean/teletype/module/edit_mode.c	2019-12-03 08:46:09.000000000 +0100
-++++ ./teletype/module/edit_mode.c	2019-12-04 11:07:02.815603671 +0100
-+@@ -406,7 +406,15 @@
-+             prefix = 'M';
-+         else if (script == INIT_SCRIPT)
-+             prefix = 'I';
-+-
-++        else if (script == TT_SCRIPT_A)
-++            prefix = 'A';
-++        else if (script == TT_SCRIPT_B)
-++            prefix = 'B';
-++        else if (script == TT_SCRIPT_C)
-++            prefix = 'C';
-++        else if (script == TT_SCRIPT_D)
-++            prefix = 'D';
-++	
-+         if (sel1 == sel2)
-+             line_editor_draw(&le, prefix, &line[7]);
-+         else
-diff -Naur -x .git ../2019_12_22/module/usb_disk_mode.c ./module/usb_disk_mode.c
---- ../2019_12_22/module/usb_disk_mode.c	2019-12-22 14:06:16.000000000 +0100
-+++ ./module/usb_disk_mode.c	2019-12-22 14:07:39.982649728 +0100
+diff -Naur ./module/usb_disk_mode.c ../2020_05_26_12_scripts/module/usb_disk_mode.c
+--- ./module/usb_disk_mode.c	2020-05-26 16:12:19.373454306 +0200
++++ ../2020_05_26_12_scripts/module/usb_disk_mode.c	2020-05-26 16:12:55.438040119 +0200
 @@ -121,7 +121,7 @@
              }
  
@@ -140,9 +117,9 @@ diff -Naur -x .git ../2019_12_22/module/usb_disk_mode.c ./module/usb_disk_mode.c
 -}
 \ No newline at end of file
 +}
-diff -Naur -x .git ../2019_12_22/src/ops/controlflow.c ./src/ops/controlflow.c
---- ../2019_12_22/src/ops/controlflow.c	2019-12-22 14:06:16.000000000 +0100
-+++ ./src/ops/controlflow.c	2019-12-22 14:07:39.982649728 +0100
+diff -Naur ./src/ops/controlflow.c ../2020_05_26_12_scripts/src/ops/controlflow.c
+--- ./src/ops/controlflow.c	2020-05-26 16:12:19.373454306 +0200
++++ ../2020_05_26_12_scripts/src/ops/controlflow.c	2020-05-26 16:12:55.438040119 +0200
 @@ -242,7 +242,7 @@
  static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
                            exec_state_t *es, command_state_t *cs) {
@@ -161,9 +138,9 @@ diff -Naur -x .git ../2019_12_22/src/ops/controlflow.c ./src/ops/controlflow.c
              ss_set_script_pol(ss, s, pol);
          }
      }
-diff -Naur -x .git ../2019_12_22/src/state.h ./src/state.h
---- ../2019_12_22/src/state.h	2019-12-22 14:06:16.000000000 +0100
-+++ ./src/state.h	2019-12-22 14:07:39.982649728 +0100
+diff -Naur ./src/state.h ../2020_05_26_12_scripts/src/state.h
+--- ./src/state.h	2020-05-26 16:12:19.377454370 +0200
++++ ../2020_05_26_12_scripts/src/state.h	2020-05-26 16:12:55.438040119 +0200
 @@ -22,7 +22,7 @@
  #define PATTERN_COUNT 4
  #define PATTERN_LENGTH 64
@@ -173,9 +150,9 @@ diff -Naur -x .git ../2019_12_22/src/state.h ./src/state.h
  #define EXEC_DEPTH 8
  #define WHILE_DEPTH 10000
  #define RAND_STATES_COUNT 5
-diff -Naur -x .git ../2019_12_22/src/turtle.h ./src/turtle.h
---- ../2019_12_22/src/turtle.h	2019-12-22 14:06:16.000000000 +0100
-+++ ./src/turtle.h	2019-12-22 14:07:39.982649728 +0100
+diff -Naur ./src/turtle.h ../2020_05_26_12_scripts/src/turtle.h
+--- ./src/turtle.h	2020-05-26 16:12:19.377454370 +0200
++++ ../2020_05_26_12_scripts/src/turtle.h	2020-05-26 16:12:55.438040119 +0200
 @@ -41,6 +41,10 @@
      TT_SCRIPT_8,
      METRO_SCRIPT,
