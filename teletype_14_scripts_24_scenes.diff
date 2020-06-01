@@ -1,0 +1,196 @@
+diff -Naur ./module/edit_mode.c ../2020_05_26_14scripts/module/edit_mode.c
+--- ./module/edit_mode.c	2020-05-26 15:48:34.386865455 +0200
++++ ../2020_05_26_14scripts/module/edit_mode.c	2020-05-26 15:53:37.335974306 +0200
+@@ -409,6 +409,30 @@
+         }
+         else if (script == INIT_SCRIPT)
+             prefix = 'I';
++        else if (script == TT_SCRIPT_A) {
++            prefix = 'A';
++	    muted = true;
++	}
++	else if (script == TT_SCRIPT_B) {
++            prefix = 'B';
++	    muted = true;
++	}
++        else if (script == TT_SCRIPT_C) {
++            prefix = 'C';
++	    muted = true;
++	}	    
++        else if (script == TT_SCRIPT_D) {
++            prefix = 'D';
++	    muted = true;
++	}	    
++        else if (script == TT_SCRIPT_E) {
++            prefix = 'E';
++	    muted = true;
++	}	    
++        else if (script == TT_SCRIPT_F) {
++            prefix = 'F';
++	    muted = true;
++	}	    
+         else if (script <= TT_SCRIPT_8)
+             muted = ss_get_mute(&scene_state, script);
+ 
+diff -Naur ./module/usb_disk_mode.c ../2020_05_26_14scripts/module/usb_disk_mode.c
+--- ./module/usb_disk_mode.c	2020-05-26 15:48:34.390865586 +0200
++++ ../2020_05_26_14scripts/module/usb_disk_mode.c	2020-05-26 15:58:46.560108761 +0200
+@@ -121,7 +121,7 @@
+             }
+ 
+             char input[36];
+-            for (int s = 0; s < 10; s++) {
++            for (int s = 0; s < 16; s++) {
+                 file_putc('\n');
+                 file_putc('\n');
+                 file_putc('#');
+@@ -129,6 +129,18 @@
+                     file_putc('M');
+                 else if (s == 9)
+                     file_putc('I');
++                else if (s == 10)
++                    file_putc('A');
++                else if (s == 11)
++                    file_putc('B');
++                else if (s == 12)
++                    file_putc('C');
++                else if (s == 13)
++                    file_putc('D');
++                else if (s == 14)
++                    file_putc('E');
++                else if (s == 15)
++                    file_putc('F');
+                 else
+                     file_putc(s + 49);
+ 
+@@ -261,11 +273,23 @@
+                                     s = 8;
+                                 else if (c == 'I')
+                                     s = 9;
+-                                else if (c == 'P')
++                                else if (c == 'A')
+                                     s = 10;
++                                else if (c == 'B')
++                                    s = 11;
++                                else if (c == 'C')
++                                    s = 12;
++                                else if (c == 'D')
++                                    s = 13;
++                                else if (c == 'E')
++                                    s = 14;
++                                else if (c == 'F')
++                                    s = 15;
++				else if (c == 'P')
++                                    s = 16;
+                                 else if (c == 'G') {
+                                     grid_state = grid_num = grid_count = 0;
+-                                    s = 11;
++                                    s = 17;
+                                 }
+                                 else {
+                                     s = c - 49;
+@@ -298,7 +322,7 @@
+                             }
+                         }
+                         // SCRIPTS
+-                        else if (s >= 0 && s <= 9) {
++                        else if (s >= 0 && s <= 15) {
+                             if (c == '\n') {
+                                 if (p && l < SCRIPT_MAX_COMMANDS) {
+                                     tele_command_t temp;
+@@ -342,7 +366,7 @@
+                         }
+                         // PATTERNS
+                         // tele_patterns[]. l wrap start end v[64]
+-                        else if (s == 10) {
++                        else if (s == 16) {
+                             if (c == '\n' || c == '\t') {
+                                 if (b < 4) {
+                                     if (l > 3) {
+@@ -375,7 +399,8 @@
+ 
+                                 if (c == '\n') {
+                                     if (p) l++;
+-                                    if (l > 68) s = -1;
++				    // ATTE: 64 + 4?????
++                                    if (l > PATTERN_LENGTH + 4) s = -1;
+                                     b = 0;
+                                     p = 0;
+                                 }
+@@ -392,7 +417,7 @@
+                             }
+                         }
+                         // GRID
+-                        else if (s == 11) {
++                        else if (s == 17) {
+                             grid_usb_read(&scene, c);
+                         }
+                     }
+@@ -458,4 +483,4 @@
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff -Naur ./src/ops/controlflow.c ../2020_05_26_14scripts/src/ops/controlflow.c
+--- ./src/ops/controlflow.c	2020-05-26 15:48:34.390865586 +0200
++++ ../2020_05_26_14scripts/src/ops/controlflow.c	2020-05-26 15:59:27.089119002 +0200
+@@ -242,7 +242,7 @@
+ static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
+                           exec_state_t *es, command_state_t *cs) {
+     uint16_t a = cs_pop(cs) - 1;
+-    if (a > INIT_SCRIPT || a < TT_SCRIPT_1) return;
++    if (a > TT_SCRIPT_F || a < TT_SCRIPT_1) return;
+ 
+     es_push(es);
+     // an overflow causes all future SCRIPT calls to fail
+@@ -271,7 +271,7 @@
+     }
+     else {
+         uint8_t s = a - 1;
+-        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_8) {
++        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_F) {
+             ss_set_script_pol(ss, s, pol);
+         }
+     }
+diff -Naur ./src/state.h ../2020_05_26_14scripts/src/state.h
+--- ./src/state.h	2020-05-26 15:48:34.394865717 +0200
++++ ../2020_05_26_14scripts/src/state.h	2020-05-26 15:59:49.401670882 +0200
+@@ -22,7 +22,7 @@
+ #define PATTERN_COUNT 4
+ #define PATTERN_LENGTH 64
+ #define SCRIPT_MAX_COMMANDS 6
+-#define SCRIPT_COUNT 11
++#define SCRIPT_COUNT 17
+ #define EXEC_DEPTH 8
+ #define WHILE_DEPTH 10000
+ #define RAND_STATES_COUNT 5
+diff -Naur ./src/turtle.h ../2020_05_26_14scripts/src/turtle.h
+--- ./src/turtle.h	2020-05-26 15:48:34.394865717 +0200
++++ ../2020_05_26_14scripts/src/turtle.h	2020-05-26 16:00:22.870493338 +0200
+@@ -41,6 +41,12 @@
+     TT_SCRIPT_8,
+     METRO_SCRIPT,
+     INIT_SCRIPT,
++    TT_SCRIPT_A,
++    TT_SCRIPT_B,
++    TT_SCRIPT_C,
++    TT_SCRIPT_D,
++    TT_SCRIPT_E,
++    TT_SCRIPT_F,
+     TEMP_SCRIPT
+ } script_number_t;
+ 
+diff -Naur ../2020_06_01/module/flash.h ./module/flash.h
+--- ../2020_06_01/module/flash.h	2020-06-01 00:01:48.432439003 +0200
++++ ./module/flash.h	2020-06-01 00:02:48.549016589 +0200
+@@ -7,7 +7,7 @@
+ #include "line_editor.h"
+ #include "teletype.h"
+ 
+-#define SCENE_SLOTS 32
++#define SCENE_SLOTS 24
+ 
+ u8 is_flash_fresh(void);
+ void flash_prepare(void);
