@@ -1,6 +1,6 @@
-diff -Naur ../2020_08_31/module/edit_mode.c ./module/edit_mode.c
---- ../2020_08_31/module/edit_mode.c	2020-08-31 11:13:38.024547704 +0200
-+++ ./module/edit_mode.c	2020-08-31 11:14:30.217037703 +0200
+diff -Naur ../2021_01_29/module/edit_mode.c ./module/edit_mode.c
+--- ../2021_01_29/module/edit_mode.c	2021-01-29 15:19:01.000000000 +0100
++++ ./module/edit_mode.c	2021-01-29 17:33:39.237184813 +0100
 @@ -409,6 +409,38 @@
          }
          else if (script == INIT_SCRIPT)
@@ -40,9 +40,9 @@ diff -Naur ../2020_08_31/module/edit_mode.c ./module/edit_mode.c
          else if (script <= TT_SCRIPT_8)
              muted = ss_get_mute(&scene_state, script);
  
-diff -Naur ../2020_08_31/module/flash.h ./module/flash.h
---- ../2020_08_31/module/flash.h	2020-08-31 11:13:38.024547704 +0200
-+++ ./module/flash.h	2020-08-31 11:14:30.221037735 +0200
+diff -Naur ../2021_01_29/module/flash.h ./module/flash.h
+--- ../2021_01_29/module/flash.h	2021-01-29 15:19:01.000000000 +0100
++++ ./module/flash.h	2021-01-29 17:33:39.237184813 +0100
 @@ -7,7 +7,7 @@
  #include "line_editor.h"
  #include "teletype.h"
@@ -52,24 +52,28 @@ diff -Naur ../2020_08_31/module/flash.h ./module/flash.h
  
  u8 is_flash_fresh(void);
  void flash_prepare(void);
-diff -Naur ../2020_08_31/module/main.c ./module/main.c
---- ../2020_08_31/module/main.c	2020-08-31 11:13:38.028547746 +0200
-+++ ./module/main.c	2020-08-31 11:14:30.221037735 +0200
-@@ -407,7 +407,10 @@
+diff -Naur ../2021_01_29/module/main.c ./module/main.c
+--- ../2021_01_29/module/main.c	2021-01-29 15:19:01.000000000 +0100
++++ ./module/main.c	2021-01-29 17:34:10.329593412 +0100
+@@ -407,9 +407,13 @@
      else if (mode == M_PRESET_R && !(grid_connected && grid_control_mode)) {
          uint8_t preset = adc[1] >> 6;
          uint8_t deadzone = preset & 1;
 -        preset >>= 1;
-+	// atte: stop selection at SCENE_SLOTS, was hardcoded to 32...
-+        // preset >>= 1;
-+	preset = preset * SCENE_SLOTS / 64;
+-        if (!deadzone || abs(preset - get_preset()) > 1)
++	preset >>= 1;
 +
-         if (!deadzone || abs(preset - get_preset()) > 1)
++        if (!deadzone || abs(preset - get_preset()) > 1){
++	    // atte: stop selection at SCENE_SLOTS, was hardcoded to 32...
++	    preset = (preset < SCENE_SLOTS ? preset : (SCENE_SLOTS - 1));
              process_preset_r_preset(preset);
++	}
      }
-diff -Naur ../2020_08_31/module/usb_disk_mode.c ./module/usb_disk_mode.c
---- ../2020_08_31/module/usb_disk_mode.c	2020-08-31 11:13:38.028547746 +0200
-+++ ./module/usb_disk_mode.c	2020-08-31 11:17:50.978034092 +0200
+     else {
+         ss_set_param(&scene_state, adc[1] << 2);
+diff -Naur ../2021_01_29/module/usb_disk_mode.c ./module/usb_disk_mode.c
+--- ../2021_01_29/module/usb_disk_mode.c	2021-01-29 15:19:01.000000000 +0100
++++ ./module/usb_disk_mode.c	2021-01-29 17:33:39.241184866 +0100
 @@ -121,7 +121,7 @@
              }
  
@@ -169,9 +173,9 @@ diff -Naur ../2020_08_31/module/usb_disk_mode.c ./module/usb_disk_mode.c
                              grid_usb_read(&scene, c);
                          }
                      }
-diff -Naur ../2020_08_31/src/ops/controlflow.c ./src/ops/controlflow.c
---- ../2020_08_31/src/ops/controlflow.c	2020-08-31 11:13:38.028547746 +0200
-+++ ./src/ops/controlflow.c	2020-08-31 11:14:30.221037735 +0200
+diff -Naur ../2021_01_29/src/ops/controlflow.c ./src/ops/controlflow.c
+--- ../2021_01_29/src/ops/controlflow.c	2021-01-29 15:19:01.000000000 +0100
++++ ./src/ops/controlflow.c	2021-01-29 17:33:39.241184866 +0100
 @@ -242,7 +242,7 @@
  static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
                            exec_state_t *es, command_state_t *cs) {
@@ -190,9 +194,9 @@ diff -Naur ../2020_08_31/src/ops/controlflow.c ./src/ops/controlflow.c
              ss_set_script_pol(ss, s, pol);
          }
      }
-diff -Naur ../2020_08_31/src/state.h ./src/state.h
---- ../2020_08_31/src/state.h	2020-08-31 11:13:38.032547787 +0200
-+++ ./src/state.h	2020-08-31 11:14:30.225037769 +0200
+diff -Naur ../2021_01_29/src/state.h ./src/state.h
+--- ../2021_01_29/src/state.h	2021-01-29 15:19:01.000000000 +0100
++++ ./src/state.h	2021-01-29 17:33:39.241184866 +0100
 @@ -22,7 +22,7 @@
  #define PATTERN_COUNT 4
  #define PATTERN_LENGTH 64
@@ -202,9 +206,9 @@ diff -Naur ../2020_08_31/src/state.h ./src/state.h
  #define EXEC_DEPTH 8
  #define WHILE_DEPTH 10000
  #define RAND_STATES_COUNT 5
-diff -Naur ../2020_08_31/src/turtle.h ./src/turtle.h
---- ../2020_08_31/src/turtle.h	2020-08-31 11:13:38.032547787 +0200
-+++ ./src/turtle.h	2020-08-31 11:14:30.225037769 +0200
+diff -Naur ../2021_01_29/src/turtle.h ./src/turtle.h
+--- ../2021_01_29/src/turtle.h	2021-01-29 15:19:01.000000000 +0100
++++ ./src/turtle.h	2021-01-29 17:33:39.241184866 +0100
 @@ -41,6 +41,14 @@
      TT_SCRIPT_8,
      METRO_SCRIPT,
