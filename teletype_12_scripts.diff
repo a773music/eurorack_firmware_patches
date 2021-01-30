@@ -1,6 +1,6 @@
-diff -Naur ./module/edit_mode.c ../2020_05_26_12_scripts/module/edit_mode.c
---- ./module/edit_mode.c	2020-05-26 16:12:19.373454306 +0200
-+++ ../2020_05_26_12_scripts/module/edit_mode.c	2020-05-26 16:12:55.438040119 +0200
+diff -Naur ../2021_01_30/module/edit_mode.c ./module/edit_mode.c
+--- ../2021_01_30/module/edit_mode.c	2021-01-30 15:21:55.000000000 +0100
++++ ./module/edit_mode.c	2021-01-30 15:48:15.802172912 +0100
 @@ -409,6 +409,22 @@
          }
          else if (script == INIT_SCRIPT)
@@ -24,9 +24,9 @@ diff -Naur ./module/edit_mode.c ../2020_05_26_12_scripts/module/edit_mode.c
          else if (script <= TT_SCRIPT_8)
              muted = ss_get_mute(&scene_state, script);
  
-diff -Naur ./module/usb_disk_mode.c ../2020_05_26_12_scripts/module/usb_disk_mode.c
---- ./module/usb_disk_mode.c	2020-05-26 16:12:19.373454306 +0200
-+++ ../2020_05_26_12_scripts/module/usb_disk_mode.c	2020-05-26 16:12:55.438040119 +0200
+diff -Naur ../2021_01_30/module/usb_disk_mode.c ./module/usb_disk_mode.c
+--- ../2021_01_30/module/usb_disk_mode.c	2021-01-30 15:21:55.000000000 +0100
++++ ./module/usb_disk_mode.c	2021-01-30 15:48:15.806172859 +0100
 @@ -121,7 +121,7 @@
              }
  
@@ -110,16 +110,9 @@ diff -Naur ./module/usb_disk_mode.c ../2020_05_26_12_scripts/module/usb_disk_mod
                              grid_usb_read(&scene, c);
                          }
                      }
-@@ -458,4 +475,4 @@
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
-diff -Naur ./src/ops/controlflow.c ../2020_05_26_12_scripts/src/ops/controlflow.c
---- ./src/ops/controlflow.c	2020-05-26 16:12:19.373454306 +0200
-+++ ../2020_05_26_12_scripts/src/ops/controlflow.c	2020-05-26 16:12:55.438040119 +0200
+diff -Naur ../2021_01_30/src/ops/controlflow.c ./src/ops/controlflow.c
+--- ../2021_01_30/src/ops/controlflow.c	2021-01-30 15:21:55.000000000 +0100
++++ ./src/ops/controlflow.c	2021-01-30 15:48:15.806172859 +0100
 @@ -242,7 +242,7 @@
  static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
                            exec_state_t *es, command_state_t *cs) {
@@ -138,9 +131,9 @@ diff -Naur ./src/ops/controlflow.c ../2020_05_26_12_scripts/src/ops/controlflow.
              ss_set_script_pol(ss, s, pol);
          }
      }
-diff -Naur ./src/state.h ../2020_05_26_12_scripts/src/state.h
---- ./src/state.h	2020-05-26 16:12:19.377454370 +0200
-+++ ../2020_05_26_12_scripts/src/state.h	2020-05-26 16:12:55.438040119 +0200
+diff -Naur ../2021_01_30/src/state.h ./src/state.h
+--- ../2021_01_30/src/state.h	2021-01-30 15:21:55.000000000 +0100
++++ ./src/state.h	2021-01-30 15:48:15.806172859 +0100
 @@ -22,7 +22,7 @@
  #define PATTERN_COUNT 4
  #define PATTERN_LENGTH 64
@@ -150,9 +143,9 @@ diff -Naur ./src/state.h ../2020_05_26_12_scripts/src/state.h
  #define EXEC_DEPTH 8
  #define WHILE_DEPTH 10000
  #define RAND_STATES_COUNT 5
-diff -Naur ./src/turtle.h ../2020_05_26_12_scripts/src/turtle.h
---- ./src/turtle.h	2020-05-26 16:12:19.377454370 +0200
-+++ ../2020_05_26_12_scripts/src/turtle.h	2020-05-26 16:12:55.438040119 +0200
+diff -Naur ../2021_01_30/src/turtle.h ./src/turtle.h
+--- ../2021_01_30/src/turtle.h	2021-01-30 15:21:55.000000000 +0100
++++ ./src/turtle.h	2021-01-30 15:48:15.806172859 +0100
 @@ -41,6 +41,10 @@
      TT_SCRIPT_8,
      METRO_SCRIPT,
