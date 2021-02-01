@@ -43,42 +43,42 @@ diff -x '*.pyc' -x teletype.zip -x .git -Naur ../2021_01_30/module/edit_mode.c .
 +        else if (script == TT_SCRIPT_8) {
 +	    strcpy(prefix, "8");
 +	}
-+        else if (script == TT_SCRIPT_A) {
++        else if (script == TT_SCRIPT_11) {
 +            //prefix = 'A';
 +	    strcpy(prefix, "11");
 +	    muted = true;
 +	}
-+	else if (script == TT_SCRIPT_B) {
++	else if (script == TT_SCRIPT_12) {
 +            //prefix = 'B';
 +	    strcpy(prefix, "12");
 +	    muted = true;
 +	}
-+        else if (script == TT_SCRIPT_C) {
++        else if (script == TT_SCRIPT_13) {
 +            //prefix = 'C';
 +	    strcpy(prefix, "13");
 +	    muted = true;
 +	}	    
-+        else if (script == TT_SCRIPT_D) {
++        else if (script == TT_SCRIPT_14) {
 +            //prefix = 'D';
 +	    strcpy(prefix, "14");
 +	    muted = true;
 +	}	    
-+        else if (script == TT_SCRIPT_E) {
++        else if (script == TT_SCRIPT_15) {
 +            //prefix = 'E';
 +	    strcpy(prefix, "15");
 +	    muted = true;
 +	}	    
-+        else if (script == TT_SCRIPT_F) {
++        else if (script == TT_SCRIPT_16) {
 +            //prefix = 'F';
 +	    strcpy(prefix, "16");
 +	    muted = true;
 +	}
-+        else if (script == TT_SCRIPT_H) {
++        else if (script == TT_SCRIPT_17) {
 +            //prefix = 'H';
 +	    strcpy(prefix, "17");
 +	    muted = true;
 +	}
-+        else if (script == TT_SCRIPT_J) {
++        else if (script == TT_SCRIPT_18) {
 +            //prefix = 'J';
 +	    strcpy(prefix, "18");
 +	    muted = true;
@@ -267,7 +267,7 @@ diff -x '*.pyc' -x teletype.zip -x .git -Naur ../2021_01_30/src/ops/controlflow.
                            exec_state_t *es, command_state_t *cs) {
      uint16_t a = cs_pop(cs) - 1;
 -    if (a > INIT_SCRIPT || a < TT_SCRIPT_1) return;
-+    if (a > TT_SCRIPT_J || a < TT_SCRIPT_1) return;
++    if (a > TT_SCRIPT_18 || a < TT_SCRIPT_1) return;
  
      es_push(es);
      // an overflow causes all future SCRIPT calls to fail
@@ -276,7 +276,7 @@ diff -x '*.pyc' -x teletype.zip -x .git -Naur ../2021_01_30/src/ops/controlflow.
      else {
          uint8_t s = a - 1;
 -        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_8) {
-+        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_J) {
++        if (s >= TT_SCRIPT_1 && s <= TT_SCRIPT_18) {
              ss_set_script_pol(ss, s, pol);
          }
      }
@@ -299,14 +299,14 @@ diff -x '*.pyc' -x teletype.zip -x .git -Naur ../2021_01_30/src/turtle.h ./src/t
      TT_SCRIPT_8,
      METRO_SCRIPT,
      INIT_SCRIPT,
-+    TT_SCRIPT_A,
-+    TT_SCRIPT_B,
-+    TT_SCRIPT_C,
-+    TT_SCRIPT_D,
-+    TT_SCRIPT_E,
-+    TT_SCRIPT_F,
-+    TT_SCRIPT_H,
-+    TT_SCRIPT_J,
++    TT_SCRIPT_11,
++    TT_SCRIPT_12,
++    TT_SCRIPT_13,
++    TT_SCRIPT_14,
++    TT_SCRIPT_15,
++    TT_SCRIPT_16,
++    TT_SCRIPT_17,
++    TT_SCRIPT_18,
      TEMP_SCRIPT
  } script_number_t;
  
