@@ -4,7 +4,7 @@ Distributed as is, apply at your own risk.
 ## Rings
 The patch will make (mutable) rings only jump in octaves on the frequency knob when patch chord in v/oct input
 
-##Teletype
+## Teletype
 Based on [a textual explanation](https://llllllll.co/t/teletype-3-feature-requests-and-discussion/16219/379
 ) by user [jnoble](https://llllllll.co/u/jnoble) on the lines forum.  
 
