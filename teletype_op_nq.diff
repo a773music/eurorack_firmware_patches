@@ -1,6 +1,6 @@
 diff -Naur ../2021_02_04/src/match_token.rl ./src/match_token.rl
 --- ../2021_02_04/src/match_token.rl	2021-02-04 07:53:51.000000000 +0100
-+++ ./src/match_token.rl	2021-02-04 15:55:44.086922581 +0100
++++ ./src/match_token.rl	2021-02-04 16:50:05.047099030 +0100
 @@ -212,6 +212,7 @@
          "N.S"         => { MATCH_OP(E_OP_N_S); };
          "N.C"         => { MATCH_OP(E_OP_N_C); };
@@ -11,7 +11,7 @@ diff -Naur ../2021_02_04/src/match_token.rl ./src/match_token.rl
          "ER"          => { MATCH_OP(E_OP_ER); };
 diff -Naur ../2021_02_04/src/ops/maths.c ./src/ops/maths.c
 --- ../2021_02_04/src/ops/maths.c	2021-02-04 07:53:51.000000000 +0100
-+++ ./src/ops/maths.c	2021-02-04 15:55:44.086922581 +0100
++++ ./src/ops/maths.c	2021-02-04 16:50:05.047099030 +0100
 @@ -100,6 +100,8 @@
                         command_state_t *cs);
  static void op_N_CS_get(const void *data, scene_state_t *ss, exec_state_t *es,
@@ -69,31 +69,9 @@ diff -Naur ../2021_02_04/src/ops/maths.c ./src/ops/maths.c
  static void op_N_C_get(const void *NOTUSED(data), scene_state_t *NOTUSED(ss),
                         exec_state_t *NOTUSED(es), command_state_t *cs) {
      int16_t root = cs_pop(cs);
-@@ -899,7 +935,20 @@
-         cs_push(cs, table_n[root + scl_trans + ch_trans]);
-     }
- }
--
-+/*
-+static void op_N_Q_get(const void *NOTUSED(data), scene_state_t *NOTUSED(ss),
-+                       exec_state_t *NOTUSED(es), command_state_t *cs) {
-+    int16_t root = cs_pop(cs);
-+    //int16_t scale = (cs_pop(cs) + 900) % 9;
-+    int16_t scale = cs_pop(cs) % 9;
-+    int16_t degree = cs_pop(cs);
-+    int16_t octave = degree / 7;
-+    degree = degree % 7;
-+    //int16_t transpose = table_n_s[scale][degree] + (12 * octave);
-+    int16_t transpose = table_n_s[scale][degree];
-+    cs_push(cs, -table_n[root + transpose]);
-+}
-+*/
- static void op_BPM_get(const void *NOTUSED(data), scene_state_t *NOTUSED(ss),
-                        exec_state_t *NOTUSED(es), command_state_t *cs) {
-     int16_t a = cs_pop(cs);
 diff -Naur ../2021_02_04/src/ops/maths.h ./src/ops/maths.h
 --- ../2021_02_04/src/ops/maths.h	2021-02-04 07:53:51.000000000 +0100
-+++ ./src/ops/maths.h	2021-02-04 15:55:44.086922581 +0100
++++ ./src/ops/maths.h	2021-02-04 16:50:05.047099030 +0100
 @@ -51,6 +51,7 @@
  extern const tele_op_t op_N_S;
  extern const tele_op_t op_N_C;
@@ -104,7 +82,7 @@ diff -Naur ../2021_02_04/src/ops/maths.h ./src/ops/maths.h
  extern const tele_op_t op_ER;
 diff -Naur ../2021_02_04/src/ops/op.c ./src/ops/op.c
 --- ../2021_02_04/src/ops/op.c	2021-02-04 07:53:51.000000000 +0100
-+++ ./src/ops/op.c	2021-02-04 15:55:44.086922581 +0100
++++ ./src/ops/op.c	2021-02-04 16:50:05.047099030 +0100
 @@ -86,7 +86,7 @@
      &op_WRAP, &op_WRP, &op_QT, &op_QT_S, &op_QT_CS, &op_QT_B, &op_AVG, &op_EQ,
      &op_NE, &op_LT, &op_GT, &op_LTE, &op_GTE, &op_NZ, &op_EZ, &op_RSH, &op_LSH,
@@ -116,7 +94,7 @@ diff -Naur ../2021_02_04/src/ops/op.c ./src/ops/op.c
      &op_CHAOS_R, &op_CHAOS_ALG, &op_SYM_PLUS, &op_SYM_DASH, &op_SYM_STAR,
 diff -Naur ../2021_02_04/src/ops/op_enum.h ./src/ops/op_enum.h
 --- ../2021_02_04/src/ops/op_enum.h	2021-02-04 07:53:51.000000000 +0100
-+++ ./src/ops/op_enum.h	2021-02-04 15:55:44.086922581 +0100
++++ ./src/ops/op_enum.h	2021-02-04 16:50:05.047099030 +0100
 @@ -185,6 +185,7 @@
      E_OP_N_S,
      E_OP_N_C,
