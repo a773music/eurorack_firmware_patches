@@ -1,5 +1,5 @@
 diff --git a/module/edit_mode.c b/module/edit_mode.c
-index e4884c0..f8ea6e9 100644
+index e219547..663474b 100644
 --- a/module/edit_mode.c
 +++ b/module/edit_mode.c
 @@ -402,13 +402,80 @@ uint8_t screen_refresh_edit() {
@@ -87,17 +87,15 @@ index e4884c0..f8ea6e9 100644
          else if (script <= TT_SCRIPT_8)
              muted = ss_get_mute(&scene_state, script);
  
-@@ -417,8 +484,8 @@ uint8_t screen_refresh_edit() {
-         else
+@@ -418,7 +485,7 @@ uint8_t screen_refresh_edit() {
              region_fill(&line[7], 0);
  
--        char script_no[2] = { prefix, '\0' };
--        font_string_region_clip(&line[7], script_no, 0, 0,
-+        //char script_no[2] = { prefix, '\0' };
-+        font_string_region_clip(&line[7], prefix, 0, 0,
-                                 muted ? 4 : 15, 0);
+         char script_no[2] = { prefix, '\0' };
+-        font_string_region_clip(&line[7], script_no, 0, 0, muted ? 4 : 15, 0);
++        font_string_region_clip(&line[7], prefix, 0, 0, muted ? 4 : 15, 0);
  
          screen_dirty |= (1 << 7);
+         dirty &= ~D_INPUT;
 diff --git a/module/flash.h b/module/flash.h
 index 8673e63..30179e9 100644
 --- a/module/flash.h
@@ -143,10 +141,10 @@ index 902ada9..66d69c7 100644
 +void line_editor_draw2(line_editor_t *le, char *prefix, region *reg);
  #endif
 diff --git a/module/main.c b/module/main.c
-index 9b7a4f1..6c030c0 100644
+index 440e7cc..6766fc9 100644
 --- a/module/main.c
 +++ b/module/main.c
-@@ -407,9 +407,13 @@ void handler_PollADC(int32_t data) {
+@@ -403,9 +403,13 @@ void handler_PollADC(int32_t data) {
      else if (mode == M_PRESET_R && !(grid_connected && grid_control_mode)) {
          uint8_t preset = adc[1] >> 6;
          uint8_t deadzone = preset & 1;
@@ -291,10 +289,10 @@ index c8a92de..d57f119 100644
                          }
                      }
 diff --git a/src/ops/controlflow.c b/src/ops/controlflow.c
-index 55c11d6..577d36d 100644
+index 01bd64e..e3f0eed 100644
 --- a/src/ops/controlflow.c
 +++ b/src/ops/controlflow.c
-@@ -254,7 +254,7 @@ static void op_SCRIPT_get(const void *NOTUSED(data), scene_state_t *ss,
+@@ -255,7 +255,7 @@ static void op_SCRIPT_get(const void *NOTUSED(data), scene_state_t *ss,
  static void op_SCRIPT_set(const void *NOTUSED(data), scene_state_t *ss,
                            exec_state_t *es, command_state_t *cs) {
      uint16_t a = cs_pop(cs) - 1;
@@ -303,7 +301,7 @@ index 55c11d6..577d36d 100644
  
      es_push(es);
      // an overflow causes all future SCRIPT calls to fail
-@@ -283,7 +283,7 @@ static void op_SCRIPT_POL_set(const void *NOTUSED(data), scene_state_t *ss,
+@@ -284,7 +284,7 @@ static void op_SCRIPT_POL_set(const void *NOTUSED(data), scene_state_t *ss,
      }
      else {
          uint8_t s = a - 1;
@@ -313,7 +311,7 @@ index 55c11d6..577d36d 100644
          }
      }
 diff --git a/src/state.h b/src/state.h
-index 6f22415..29a374e 100644
+index 1872aab..38e54b0 100644
 --- a/src/state.h
 +++ b/src/state.h
 @@ -22,7 +22,7 @@
