@@ -141,7 +141,7 @@ index 902ada9..66d69c7 100644
 +void line_editor_draw2(line_editor_t *le, char *prefix, region *reg);
  #endif
 diff --git a/module/main.c b/module/main.c
-index 440e7cc..6766fc9 100644
+index a537997..1b83108 100644
 --- a/module/main.c
 +++ b/module/main.c
 @@ -403,9 +403,13 @@ void handler_PollADC(int32_t data) {
@@ -310,6 +310,53 @@ index 01bd64e..e3f0eed 100644
              ss_set_script_pol(ss, s, pol);
          }
      }
+diff --git a/src/ops/grid_ops.c b/src/ops/grid_ops.c
+index a8c37b2..a7c137c 100644
+--- a/src/ops/grid_ops.c
++++ b/src/ops/grid_ops.c
+@@ -387,7 +387,7 @@ static void op_G_GRP_SC_set(const void *NOTUSED(data), scene_state_t *ss,
+     s16 script = cs_pop(cs) - 1;
+ 
+     if (group < (s16)0 || group >= (s16)GRID_GROUP_COUNT) return;
+-    if (script < 0 || script > INIT_SCRIPT) script = -1;
++    if (script < 0 || script > TT_SCRIPT_18) script = -1;
+ 
+     SG.group[group].script = script;
+ }
+@@ -1390,7 +1390,7 @@ static void op_G_XYP_get(const void *NOTUSED(data), scene_state_t *ss,
+     s16 script = cs_pop(cs) - 1;
+ 
+     if (i < (s16)0 || i >= (s16)GRID_XYPAD_COUNT) return;
+-    if (script < 0 || script > INIT_SCRIPT) script = -1;
++    if (script < 0 || script > TT_SCRIPT_18) script = -1;
+     CLAMP_X_Y_W_H(return );
+ 
+     GXYC.enabled = true;
+@@ -1493,7 +1493,7 @@ static void grid_init_button(scene_state_t *ss, s16 group, s16 i, s16 x, s16 y,
+     else if (level > (s16)15)
+         level = 15;
+ 
+-    if (script < 0 || script > INIT_SCRIPT) script = -1;
++    if (script < 0 || script > TT_SCRIPT_18) script = -1;
+ 
+     GBC.enabled = true;
+     GBC.group = group;
+@@ -1530,7 +1530,7 @@ static void grid_init_fader(scene_state_t *ss, s16 group, s16 i, s16 x, s16 y,
+ 
+     level = grid_fader_clamp_level(level, type, w, h);
+ 
+-    if (script < 0 || script > INIT_SCRIPT) script = -1;
++    if (script < 0 || script > TT_SCRIPT_18) script = -1;
+ 
+     GFC.enabled = true;
+     GFC.group = group;
+@@ -1569,4 +1569,4 @@ static s16 grid_fader_clamp_level(s16 level, s16 type, s16 w, s16 h) {
+         if (level > (s16)15) return 15;
+     }
+     return level;
+-}
+\ No newline at end of file
++}
 diff --git a/src/state.h b/src/state.h
 index 1872aab..38e54b0 100644
 --- a/src/state.h
